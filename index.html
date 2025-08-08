@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Quiz</title>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        .quiz-container { width: 50%; margin: auto; }
+        .question { font-size: 1.5em; margin-bottom: 20px; }
+        .answers { list-style-type: none; }
+        .answers li { margin: 10px 0; }
+    </style>
+</head>
+<body>
+    <div class="quiz-container">
+        <div id="question-container">
+            <div class="question">What is the capital of France?</div>
+            <ul class="answers">
+                <li><button onclick="answer('A')">A) Paris</button></li>
+                <li><button onclick="answer('B')">B) Berlin</button></li>
+                <li><button onclick="answer('C')">C) Madrid</button></li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        let currentQuestion = 1;
+
+        function answer(choice) {
+            console.log(`Answer choice: ${choice}`);
+            // Logic to go to the next question, etc.
+        }
+    </script>
+</body>
+</html>
