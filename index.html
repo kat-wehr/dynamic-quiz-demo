@@ -15,22 +15,56 @@
 <body>
     <div class="quiz-container">
         <div id="question-container">
-            <div class="question">What is the capital of France?</div>
-            <ul class="answers">
-                <li><button onclick="answer('A')">A) Paris</button></li>
-                <li><button onclick="answer('B')">B) Berlin</button></li>
-                <li><button onclick="answer('C')">C) Madrid</button></li>
-            </ul>
+            <div class="question"></div>
+            <ul class="answers"></ul>
         </div>
+        <button onclick="nextQuestion()">Next Question</button>
     </div>
 
     <script>
-        let currentQuestion = 1;
+        const questions = [
+            { question: "What is the capital of France?", answers: ["Paris", "Berlin", "Madrid"], correct: "Paris" },
+            { question: "What is 2 + 2?", answers: ["3", "4", "5"], correct: "4" },
+            { question: "Who wrote '1984'?", answers: ["George Orwell", "J.K. Rowling", "Mark Twain"], correct: "George Orwell" },
+            { question: "What is the largest planet in our solar system?", answers: ["Earth", "Jupiter", "Saturn"], correct: "Jupiter" },
+            { question: "What is the boiling point of water?", answers: ["90°C", "100°C", "120°C"], correct: "100°C" },
+            { question: "Who painted the Mona Lisa?", answers: ["Vincent van Gogh", "Pablo Picasso", "Leonardo da Vinci"], correct: "Leonardo da Vinci" },
+            { question: "What is the square root of 16?", answers: ["2", "4", "8"], correct: "4" },
+            { question: "Which animal is known as the King of the Jungle?", answers: ["Lion", "Tiger", "Elephant"], correct: "Lion" },
+            { question: "What is the longest river in the world?", answers: ["Amazon", "Nile", "Yangtze"], correct: "Nile" },
+            { question: "What element does 'O' represent on the periodic table?", answers: ["Oxygen", "Osmium", "Ozone"], correct: "Oxygen" }
+        ];
 
-        function answer(choice) {
-            console.log(`Answer choice: ${choice}`);
-            // Logic to go to the next question, etc.
+        let currentQuestionIndex = 0;
+        let selectedAnswer = "";
+
+        function displayQuestion() {
+            const question = questions[currentQuestionIndex];
+            const questionContainer = document.querySelector(".question");
+            const answersContainer = document.querySelector(".answers");
+
+            questionContainer.textContent = question.question;
+            answersContainer.innerHTML = "";
+            question.answers.forEach(answer => {
+                const li = document.createElement("li");
+                li.innerHTML = `<button onclick="selectAnswer('${answer}')">${answer}</button>`;
+                answersContainer.appendChild(li);
+            });
         }
+
+        function selectAnswer(answer) {
+            selectedAnswer = answer;
+            console.log(`Selected answer: ${selectedAnswer}`);
+        }
+
+        function nextQuestion() {
+            // You can test with random selection or just move sequentially
+            currentQuestionIndex = (currentQuestionIndex + 1) % questions.length;
+            displayQuestion();
+        }
+
+        // Initialize quiz with first question
+        displayQuestion();
     </script>
 </body>
 </html>
