@@ -178,6 +178,82 @@
             background: #f8f9fa;
             border-radius: 10px;
         }
+        
+        .feedback-summary {
+            margin-top: 30px;
+            padding: 25px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 15px;
+            display: none;
+        }
+        
+        .feedback-summary h2 {
+            margin-top: 0;
+            text-align: center;
+            font-size: 1.8em;
+        }
+        
+        .strengths-weaknesses {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .strength-area, .improvement-area {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .strength-area h3 {
+            color: #90EE90;
+            margin-top: 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .improvement-area h3 {
+            color: #FFB6C1;
+            margin-top: 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .suggestion-item {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border-left: 4px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        .suggestion-title {
+            font-weight: bold;
+            margin-bottom: 8px;
+            font-size: 1.1em;
+        }
+        
+        .restart-btn {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 15px 30px;
+            font-size: 1.1em;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 8px;
+            cursor: pointer;
+            margin: 20px 10px;
+            transition: all 0.3s ease;
+        }
+        
+        .restart-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
     </style>
 </head>
 <body>
@@ -201,7 +277,28 @@
 
         <div id="feedback-container" class="feedback" style="display: none;"></div>
 
-        <button class="next-btn" onclick="nextQuestion()">Next Question</button>
+        <button class="next-btn" onclick="nextQuestion()" id="next-btn">Next Question</button>
+        
+        <div class="feedback-summary" id="feedback-summary">
+            <h2>🎓 Your Learning Journey Summary</h2>
+            
+            <div class="strengths-weaknesses">
+                <div class="strength-area">
+                    <h3>💪 Your Strengths</h3>
+                    <div id="strengths-content"></div>
+                </div>
+                
+                <div class="improvement-area">
+                    <h3>🎯 Growth Opportunities</h3>
+                    <div id="improvements-content"></div>
+                </div>
+            </div>
+            
+            <div style="text-align: center; margin-top: 30px;">
+                <button class="restart-btn" onclick="restartQuiz()">Take Quiz Again</button>
+                <button class="restart-btn" onclick="showDetailedAnalysis()">View Detailed Analysis</button>
+            </div>
+        </div>
 
         <div class="results">
             <div class="results-section">
@@ -306,69 +403,70 @@
 
     <script>
         const questions = [
-    { question: "Which mountain range runs along the eastern coast of the United States?", 
-      answers: ["Rocky Mountains", "Appalachian Mountains", "Cascade Range", "Sierra Nevada"], 
-      correct: "Appalachian Mountains", 
-      bloom: "Recall", 
-      competency: "geographic-knowledge-location" },
+            { question: "Which mountain range runs along the eastern coast of the United States?", 
+              answers: ["Rocky Mountains", "Appalachian Mountains", "Cascade Range", "Sierra Nevada"], 
+              correct: "Appalachian Mountains", 
+              bloom: "Recall", 
+              competency: "geographic-knowledge-location" },
 
-    { question: "The Continental Divide primarily runs through which mountain range?", 
-      answers: ["Appalachian Mountains", "Sierra Nevada", "Rocky Mountains", "Adirondack Mountains"], 
-      correct: "Rocky Mountains", 
-      bloom: "Comprehend", 
-      competency: "geographic-knowledge-location" },
+            { question: "The Continental Divide primarily runs through which mountain range?", 
+              answers: ["Appalachian Mountains", "Sierra Nevada", "Rocky Mountains", "Adirondack Mountains"], 
+              correct: "Rocky Mountains", 
+              bloom: "Comprehend", 
+              competency: "geographic-knowledge-location" },
 
-    { question: "What is the highest peak in the continental United States?", 
-      answers: ["Mount McKinley", "Mount Whitney", "Mount Washington", "Mount Elbert"], 
-      correct: "Mount Whitney", 
-      bloom: "Recall", 
-      competency: "physical-characteristics-formation" },
+            { question: "What is the highest peak in the continental United States?", 
+              answers: ["Mount McKinley", "Mount Whitney", "Mount Washington", "Mount Elbert"], 
+              correct: "Mount Whitney", 
+              bloom: "Recall", 
+              competency: "physical-characteristics-formation" },
 
-    { question: "If you were hiking in a mountain range known for its ancient, worn-down peaks and dense forests, which range would you most likely be exploring?", 
-      answers: ["Rocky Mountains", "Cascade Range", "Appalachian Mountains", "Sierra Nevada"], 
-      correct: "Appalachian Mountains", 
-      bloom: "Apply", 
-      competency: "physical-characteristics-formation" },
+            { question: "If you were hiking in a mountain range known for its ancient, worn-down peaks and dense forests, which range would you most likely be exploring?", 
+              answers: ["Rocky Mountains", "Cascade Range", "Appalachian Mountains", "Sierra Nevada"], 
+              correct: "Appalachian Mountains", 
+              bloom: "Apply", 
+              competency: "physical-characteristics-formation" },
 
-    { question: "Why were the Appalachian Mountains significant during early American westward expansion?", 
-      answers: ["They provided easy passage to the Pacific Ocean", "They served as a natural barrier that initially limited westward movement", "They were the primary source of gold during the Gold Rush", "They had the best climate for farming"], 
-      correct: "They served as a natural barrier that initially limited westward movement", 
-      bloom: "Comprehend", 
-      competency: "human-impact-cultural-significance" },
+            { question: "Why were the Appalachian Mountains significant during early American westward expansion?", 
+              answers: ["They provided easy passage to the Pacific Ocean", "They served as a natural barrier that initially limited westward movement", "They were the primary source of gold during the Gold Rush", "They had the best climate for farming"], 
+              correct: "They served as a natural barrier that initially limited westward movement", 
+              bloom: "Comprehend", 
+              competency: "human-impact-cultural-significance" },
 
-    { question: "Compare the geographic distribution of the Rocky Mountains and Sierra Nevada. What can you conclude about their formation and age?", 
-      answers: ["Both ranges run north-south and are approximately the same age", "The Rocky Mountains cover more states and are part of a larger, more complex system", "The Sierra Nevada is older because it's closer to the ocean", "Both were formed by the same geological process at the same time"], 
-      correct: "The Rocky Mountains cover more states and are part of a larger, more complex system", 
-      bloom: "Analyze", 
-      competency: "geographic-knowledge-location" },
+            { question: "Compare the geographic distribution of the Rocky Mountains and Sierra Nevada. What can you conclude about their formation and age?", 
+              answers: ["Both ranges run north-south and are approximately the same age", "The Rocky Mountains cover more states and are part of a larger, more complex system", "The Sierra Nevada is older because it's closer to the ocean", "Both were formed by the same geological process at the same time"], 
+              correct: "The Rocky Mountains cover more states and are part of a larger, more complex system", 
+              bloom: "Analyze", 
+              competency: "geographic-knowledge-location" },
 
-    { question: "The Pacific Ring of Fire influences which US mountain range's volcanic activity?", 
-      answers: ["Appalachian Mountains", "Rocky Mountains", "Ozark Mountains", "Cascade Range"], 
-      correct: "Cascade Range", 
-      bloom: "Analyze", 
-      competency: "physical-characteristics-formation" },
+            { question: "The Pacific Ring of Fire influences which US mountain range's volcanic activity?", 
+              answers: ["Appalachian Mountains", "Rocky Mountains", "Ozark Mountains", "Cascade Range"], 
+              correct: "Cascade Range", 
+              bloom: "Analyze", 
+              competency: "physical-characteristics-formation" },
 
-    { question: "Assess the impact of the Transcontinental Railroad on mountain communities in the Sierra Nevada. Which statement best represents the most significant long-term effect?", 
-      answers: ["It eliminated all Native American populations in the region", "It transformed the region from isolated mining camps to connected communities with diverse economies", "It made farming the primary economic activity in the mountains", "It had no lasting impact on local communities"], 
-      correct: "It transformed the region from isolated mining camps to connected communities with diverse economies", 
-      bloom: "Evaluate", 
-      competency: "human-impact-cultural-significance" },
+            { question: "Assess the impact of the Transcontinental Railroad on mountain communities in the Sierra Nevada. Which statement best represents the most significant long-term effect?", 
+              answers: ["It eliminated all Native American populations in the region", "It transformed the region from isolated mining camps to connected communities with diverse economies", "It made farming the primary economic activity in the mountains", "It had no lasting impact on local communities"], 
+              correct: "It transformed the region from isolated mining camps to connected communities with diverse economies", 
+              bloom: "Evaluate", 
+              competency: "human-impact-cultural-significance" },
 
-    { question: "Design a hiking route that would allow someone to experience three different types of mountain formation processes in the western United States. Which combination of ranges would best achieve this goal?", 
-      answers: ["Rocky Mountains, Sierra Nevada, and Cascade Range", "Appalachian Mountains, Ozark Mountains, and Rocky Mountains", "Sierra Nevada only (different elevations)", "Cascade Range and Olympic Mountains only"], 
-      correct: "Rocky Mountains, Sierra Nevada, and Cascade Range", 
-      bloom: "Create", 
-      competency: "physical-characteristics-formation" },
+            { question: "Design a hiking route that would allow someone to experience three different types of mountain formation processes in the western United States. Which combination of ranges would best achieve this goal?", 
+              answers: ["Rocky Mountains, Sierra Nevada, and Cascade Range", "Appalachian Mountains, Ozark Mountains, and Rocky Mountains", "Sierra Nevada only (different elevations)", "Cascade Range and Olympic Mountains only"], 
+              correct: "Rocky Mountains, Sierra Nevada, and Cascade Range", 
+              bloom: "Create", 
+              competency: "physical-characteristics-formation" },
 
-    { question: "Evaluate this statement: 'Mountain ranges in the western United States have had a greater impact on modern American culture than eastern ranges.' What evidence would best support or refute this claim?", 
-      answers: ["Western ranges are taller, so they're more impressive", "Eastern ranges are older and therefore more historically significant", "Western ranges continue to influence recreation, environmental policy, and pop culture more prominently today", "The statement cannot be evaluated because cultural impact cannot be measured"], 
-      correct: "Western ranges continue to influence recreation, environmental policy, and pop culture more prominently today", 
-      bloom: "Evaluate", 
-      competency: "human-impact-cultural-significance" }
-];
+            { question: "Evaluate this statement: 'Mountain ranges in the western United States have had a greater impact on modern American culture than eastern ranges.' What evidence would best support or refute this claim?", 
+              answers: ["Western ranges are taller, so they're more impressive", "Eastern ranges are older and therefore more historically significant", "Western ranges continue to influence recreation, environmental policy, and pop culture more prominently today", "The statement cannot be evaluated because cultural impact cannot be measured"], 
+              correct: "Western ranges continue to influence recreation, environmental policy, and pop culture more prominently today", 
+              bloom: "Evaluate", 
+              competency: "human-impact-cultural-significance" }
+        ];
 
         let currentQuestionIndex = 0;
         let totalCorrect = 0;
+        let questionsCompleted = 0;
 
         const bloomPoints = {
             Recall: 0,
@@ -451,7 +549,10 @@
             
             question.answers.forEach(answer => {
                 const li = document.createElement("li");
-                li.innerHTML = `<button onclick="selectAnswer('${answer.replace(/'/g, "\\'")}', '${question.bloom}', '${question.competency}')">${answer}</button>`;
+                const button = document.createElement("button");
+                button.textContent = answer;
+                button.onclick = () => selectAnswer(answer, question.bloom, question.competency);
+                li.appendChild(button);
                 answersContainer.appendChild(li);
             });
         }
@@ -477,16 +578,204 @@
                 feedbackContainer.className = "feedback incorrect-feedback";
             }
             
+            questionsCompleted++;
             updateProgressBars();
             updateOverallProgress();
         }
 
         function nextQuestion() {
-            currentQuestionIndex = (currentQuestionIndex + 1) % questions.length;
+            currentQuestionIndex++;
+            
+            // Check if we've completed all questions
+            if (currentQuestionIndex >= questions.length) {
+                displayFeedbackSummary();
+                return;
+            }
+            
+            // Update button text for last question
+            if (currentQuestionIndex === questions.length - 1) {
+                document.getElementById('next-btn').textContent = 'View Results';
+            }
+            
             displayQuestion();
         }
 
-        // Initialize
+        function analyzePerformance() {
+            const strengths = [];
+            const improvements = [];
+            
+            // Analyze Bloom's Taxonomy performance
+            const bloomAnalysis = Object.keys(bloomPoints).map(level => ({
+                level,
+                score: bloomPoints[level],
+                maxScore: maxBloomPoints[level],
+                percentage: (bloomPoints[level] / maxBloomPoints[level]) * 100
+            }));
+            
+            // Analyze Competency performance
+            const competencyAnalysis = Object.keys(competencyPoints).map(comp => ({
+                competency: comp,
+                score: competencyPoints[comp],
+                maxScore: maxCompetencyPoints[comp],
+                percentage: (competencyPoints[comp] / maxCompetencyPoints[comp]) * 100
+            }));
+            
+            // Identify Bloom's strengths and weaknesses
+            const strongBlooms = bloomAnalysis.filter(item => item.percentage >= 75);
+            const weakBlooms = bloomAnalysis.filter(item => item.percentage < 50 && item.maxScore > 0);
+            
+            // Identify Competency strengths and weaknesses  
+            const strongCompetencies = competencyAnalysis.filter(item => item.percentage >= 75);
+            const weakCompetencies = competencyAnalysis.filter(item => item.percentage < 50);
+            
+            // Generate strength feedback
+            if (strongBlooms.length > 0) {
+                const bloomLabels = {
+                    'Recall': 'remembering facts and basic concepts',
+                    'Comprehend': 'understanding and explaining ideas', 
+                    'Apply': 'applying knowledge to new situations',
+                    'Analyze': 'breaking down complex information',
+                    'Evaluate': 'making judgments and assessments',
+                    'Create': 'producing new ideas and solutions'
+                };
+                
+                strengths.push({
+                    title: `🧠 Strong Higher-Order Thinking${strongBlooms.length > 1 ? ' Skills' : ''}`,
+                    content: `You excel at ${strongBlooms.map(b => bloomLabels[b.level]).join(' and ')}. This shows solid cognitive development!`
+                });
+            }
+            
+            if (strongCompetencies.length > 0) {
+                const compLabels = {
+                    'geographic-knowledge-location': 'geographic knowledge and spatial understanding',
+                    'physical-characteristics-formation': 'understanding mountain formation and physical processes',
+                    'human-impact-cultural-significance': 'connecting geography to human society and culture'
+                };
+                
+                strengths.push({
+                    title: `🏔️ Subject Matter Expertise`,
+                    content: `You have strong knowledge in ${strongCompetencies.map(c => compLabels[c.competency]).join(' and ')}.`
+                });
+            }
+            
+            // Generate improvement suggestions
+            if (weakBlooms.length > 0) {
+                const suggestions = {
+                    'Recall': 'Try creating flashcards or mind maps to strengthen your memory of key mountain facts and terminology.',
+                    'Comprehend': 'Practice explaining concepts in your own words. Try teaching someone else about mountain formation processes.',
+                    'Apply': 'Look for real-world examples and practice applying mountain concepts to new scenarios you encounter.',
+                    'Analyze': 'Practice breaking down complex geographic relationships. Compare and contrast different mountain ranges.',
+                    'Evaluate': 'Develop your critical thinking by examining multiple sources and making evidence-based judgments about geographic claims.',
+                    'Create': 'Challenge yourself to design solutions or create new connections between geographic concepts.'
+                };
+                
+                weakBlooms.forEach(bloom => {
+                    improvements.push({
+                        title: `📚 Strengthen ${bloom.level} Skills`,
+                        content: suggestions[bloom.level]
+                    });
+                });
+            }
+            
+            if (weakCompetencies.length > 0) {
+                const compSuggestions = {
+                    'geographic-knowledge-location': 'Review maps and practice identifying mountain ranges. Try using interactive geography tools or apps.',
+                    'physical-characteristics-formation': 'Study geological processes more deeply. Watch videos about plate tectonics and mountain building.',
+                    'human-impact-cultural-significance': 'Explore how mountains influence human settlement, culture, and economic activities. Read about mountain communities.'
+                };
+                
+                weakCompetencies.forEach(comp => {
+                    const labels = {
+                        'geographic-knowledge-location': 'Geographic Knowledge',
+                        'physical-characteristics-formation': 'Physical Processes', 
+                        'human-impact-cultural-significance': 'Human-Environment Connections'
+                    };
+                    
+                    improvements.push({
+                        title: `🎯 Develop ${labels[comp.competency]}`,
+                        content: compSuggestions[comp.competency]
+                    });
+                });
+            }
+            
+            // Default messages if no clear patterns
+            if (strengths.length === 0) {
+                strengths.push({
+                    title: '🌟 Building Foundation',
+                    content: 'You\'re developing your understanding across multiple areas. Keep practicing to build your expertise!'
+                });
+            }
+            
+            if (improvements.length === 0) {
+                improvements.push({
+                    title: '🏆 Well Rounded Performance',
+                    content: 'Great job! You\'re performing well across all areas. Challenge yourself with more advanced geographic concepts.'
+                });
+            }
+            
+            return { strengths, improvements };
+        }
+        
+        function displayFeedbackSummary() {
+            const analysis = analyzePerformance();
+            const strengthsContainer = document.getElementById('strengths-content');
+            const improvementsContainer = document.getElementById('improvements-content');
+            
+            // Display strengths
+            strengthsContainer.innerHTML = analysis.strengths.map(strength => `
+                <div class="suggestion-item">
+                    <div class="suggestion-title">${strength.title}</div>
+                    <div>${strength.content}</div>
+                </div>
+            `).join('');
+            
+            // Display improvements
+            improvementsContainer.innerHTML = analysis.improvements.map(improvement => `
+                <div class="suggestion-item">
+                    <div class="suggestion-title">${improvement.title}</div>
+                    <div>${improvement.content}</div>
+                </div>
+            `).join('');
+            
+            // Show the feedback summary
+            document.getElementById('feedback-summary').style.display = 'block';
+            document.getElementById('next-btn').style.display = 'none';
+        }
+        
+        function restartQuiz() {
+            // Reset all variables
+            currentQuestionIndex = 0;
+            totalCorrect = 0;
+            questionsCompleted = 0;
+            
+            // Reset points
+            Object.keys(bloomPoints).forEach(key => bloomPoints[key] = 0);
+            Object.keys(competencyPoints).forEach(key => competencyPoints[key] = 0);
+            
+            // Reset UI
+            document.getElementById('feedback-summary').style.display = 'none';
+            document.getElementById('next-btn').style.display = 'block';
+            document.getElementById('next-btn').textContent = 'Next Question';
+            
+            // Update displays
+            updateProgressBars();
+            updateOverallProgress();
+            displayQuestion();
+            
+            // Update point displays
+            Object.keys(bloomPoints).forEach(bloom => {
+                document.getElementById(`${bloom.toLowerCase()}-points`).textContent = '0';
+            });
+            Object.keys(competencyPoints).forEach(comp => {
+                document.getElementById(`competency-${comp}`).textContent = '0';
+            });
+        }
+        
+        function showDetailedAnalysis() {
+            alert('Detailed Analysis Feature:\n\nIn a full implementation, this would show:\n• Specific question performance\n• Recommended study materials\n• Links to relevant resources\n• Progress tracking over time\n• Personalized learning paths\n\nThis is perfect for integration with your Learning Management System!');
+        }
+
+        // Initialize the quiz
         displayQuestion();
         updateProgressBars();
         updateOverallProgress();
