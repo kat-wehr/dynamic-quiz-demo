@@ -12,6 +12,8 @@
         .answers li { margin: 10px 0; }
         .results { margin-top: 20px; }
         .results div { margin: 5px 0; }
+        .feedback { font-size: 1.1em; color: #2e8b57; margin-top: 10px; }
+        .incorrect-feedback { color: #e74c3c; }
     </style>
 </head>
 <body>
@@ -31,6 +33,8 @@
             <div>Evaluate: <span id="evaluate-points">0</span></div>
             <div>Create: <span id="create-points">0</span></div>
         </div>
+
+        <div id="feedback-container" class="feedback"></div>
 
         <button onclick="nextQuestion()">Next Question</button>
     </div>
@@ -60,9 +64,11 @@
             const question = questions[currentQuestionIndex];
             const questionContainer = document.querySelector(".question");
             const answersContainer = document.querySelector(".answers");
+            const feedbackContainer = document.querySelector("#feedback-container");
 
             questionContainer.textContent = question.question;
             answersContainer.innerHTML = "";
+            feedbackContainer.textContent = ""; // Clear previous feedback
             question.answers.forEach(answer => {
                 const li = document.createElement("li");
                 li.innerHTML = `<button onclick="selectAnswer('${answer}', '${question.bloom}')">${answer}</button>`;
@@ -72,9 +78,16 @@
 
         function selectAnswer(answer, bloom) {
             const question = questions[currentQuestionIndex];
+            const feedbackContainer = document.querySelector("#feedback-container");
+
             if (answer === question.correct) {
                 bloomPoints[bloom]++;
                 document.getElementById(`${bloom.toLowerCase()}-points`).textContent = bloomPoints[bloom];
+                feedbackContainer.textContent = "Good job! You got it right!";
+                feedbackContainer.className = "feedback";
+            } else {
+                feedbackContainer.textContent = "Keep trying, you're getting there!";
+                feedbackContainer.className = "feedback incorrect-feedback";
             }
         }
 
