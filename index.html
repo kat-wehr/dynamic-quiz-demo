@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quiz with Bloom's Taxonomy</title>
+    <title>US Mountain Ranges Quiz</title>
     <style>
         body { font-family: Arial, sans-serif; }
         .quiz-container { width: 50%; margin: auto; }
@@ -34,6 +34,13 @@
             <div>Create: <span id="create-points">0</span></div>
         </div>
 
+        <div class="results">
+            <h3>Points by Competency:</h3>
+            <div>Geographic Knowledge & Location: <span id="competency-geographic">0</span></div>
+            <div>Physical Characteristics & Formation: <span id="competency-physical">0</span></div>
+            <div>Human Impact & Cultural Significance: <span id="competency-human">0</span></div>
+        </div>
+
         <div id="feedback-container" class="feedback"></div>
 
         <button onclick="nextQuestion()">Next Question</button>
@@ -41,12 +48,65 @@
 
     <script>
         const questions = [
-            { question: "What is 2 + 2?", answers: ["3", "4", "5"], correct: "4", bloom: "Recall" },
-            { question: "Explain why water boils at 100°C.", answers: ["Because it's a chemical reaction", "Because of air pressure", "Because of molecular movement"], correct: "Because of molecular movement", bloom: "Comprehend" },
-            { question: "Use the Pythagorean theorem to solve for c in a right triangle.", answers: ["c = √(a^2 + b^2)", "c = a + b", "c = a - b"], correct: "c = √(a^2 + b^2)", bloom: "Apply" },
-            { question: "Identify the primary argument in an article on climate change.", answers: ["Global warming is caused by humans", "Climate change is not real", "Climate change is a natural cycle"], correct: "Global warming is caused by humans", bloom: "Analyze" },
-            { question: "Judge the effectiveness of a public policy on climate change.", answers: ["It's working", "It's not working", "It needs more funding"], correct: "It's working", bloom: "Evaluate" },
-            { question: "Design a solution to reduce energy consumption in cities.", answers: ["Use solar power", "Improve insulation", "Increase public transportation"], correct: "Increase public transportation", bloom: "Create" }
+            { question: "Which mountain range runs along the eastern coast of the United States?", 
+              answers: ["Rocky Mountains", "Appalachian Mountains", "Cascade Range", "Sierra Nevada"], 
+              correct: "Appalachian Mountains", 
+              bloom: "Recall", 
+              competency: "Geographic Knowledge & Location" },
+
+            { question: "The Continental Divide primarily runs through which mountain range?", 
+              answers: ["Appalachian Mountains", "Sierra Nevada", "Rocky Mountains", "Adirondack Mountains"], 
+              correct: "Rocky Mountains", 
+              bloom: "Comprehend", 
+              competency: "Geographic Knowledge & Location" },
+
+            { question: "What is the highest peak in the continental United States?", 
+              answers: ["Mount McKinley", "Mount Whitney", "Mount Washington", "Mount Elbert"], 
+              correct: "Mount Whitney", 
+              bloom: "Recall", 
+              competency: "Physical Characteristics & Formation" },
+
+            { question: "If you were hiking in a mountain range known for its ancient, worn-down peaks and dense forests, which range would you most likely be exploring?", 
+              answers: ["Rocky Mountains", "Cascade Range", "Appalachian Mountains", "Sierra Nevada"], 
+              correct: "Appalachian Mountains", 
+              bloom: "Apply", 
+              competency: "Physical Characteristics & Formation" },
+
+            { question: "Why were the Appalachian Mountains significant during early American westward expansion?", 
+              answers: ["They provided easy passage to the Pacific Ocean", "They served as a natural barrier that initially limited westward movement", "They were the primary source of gold during the Gold Rush", "They had the best climate for farming"], 
+              correct: "They served as a natural barrier that initially limited westward movement", 
+              bloom: "Comprehend", 
+              competency: "Human Impact & Cultural Significance" },
+
+            { question: "Compare the geographic distribution of the Rocky Mountains and Sierra Nevada. What can you conclude about their formation and age?", 
+              answers: ["Both ranges run north-south and are approximately the same age", "The Rocky Mountains cover more states and are part of a larger, more complex system", "The Sierra Nevada is older because it's closer to the ocean", "Both were formed by the same geological process at the same time"], 
+              correct: "The Rocky Mountains cover more states and are part of a larger, more complex system", 
+              bloom: "Analyze", 
+              competency: "Geographic Knowledge & Location" },
+
+            { question: "The Pacific Ring of Fire influences which US mountain range's volcanic activity?", 
+              answers: ["Appalachian Mountains", "Rocky Mountains", "Ozark Mountains", "Cascade Range"], 
+              correct: "Cascade Range", 
+              bloom: "Analyze", 
+              competency: "Physical Characteristics & Formation" },
+
+            { question: "Assess the impact of the Transcontinental Railroad on mountain communities in the Sierra Nevada. Which statement best represents the most significant long-term effect?", 
+              answers: ["It eliminated all Native American populations in the region", "It transformed the region from isolated mining camps to connected communities with diverse economies", "It made farming the primary economic activity in the mountains", "It had no lasting impact on local communities"], 
+              correct: "It transformed the region from isolated mining camps to connected communities with diverse economies", 
+              bloom: "Evaluate", 
+              competency: "Human Impact & Cultural Significance" },
+
+            { question: "Design a hiking route that would allow someone to experience three different types of mountain formation processes in the western United States. Which combination of ranges would best achieve this goal?", 
+              answers: ["Rocky Mountains, Sierra Nevada, and Cascade Range", "Appalachian Mountains, Ozark Mountains, and Rocky Mountains", "Sierra Nevada only (different elevations)", "Cascade Range and Olympic Mountains only"], 
+              correct: "Rocky Mountains, Sierra Nevada, and Cascade Range", 
+              bloom: "Create", 
+              competency: "Physical Characteristics & Formation" },
+
+            { question: "Evaluate this statement: 'Mountain ranges in the western United States have had a greater impact on modern American culture than eastern ranges.' What evidence would best support or refute this claim?", 
+              answers: ["Western ranges are taller, so they're more impressive", "Eastern ranges are older and therefore more historically significant", "Western ranges continue to influence recreation, environmental policy, and pop culture more prominently today", "The statement cannot be evaluated because cultural impact cannot be measured"], 
+              correct: "Western ranges continue to influence recreation, environmental policy, and pop culture more prominently today", 
+              bloom: "Evaluate", 
+              competency: "Human Impact & Cultural Significance" }
         ];
 
         let currentQuestionIndex = 0;
@@ -60,6 +120,12 @@
             Create: 0
         };
 
+        const competencyPoints = {
+            "Geographic Knowledge & Location": 0,
+            "Physical Characteristics & Formation": 0,
+            "Human Impact & Cultural Significance": 0
+        };
+
         function displayQuestion() {
             const question = questions[currentQuestionIndex];
             const questionContainer = document.querySelector(".question");
@@ -71,18 +137,20 @@
             feedbackContainer.textContent = ""; // Clear previous feedback
             question.answers.forEach(answer => {
                 const li = document.createElement("li");
-                li.innerHTML = `<button onclick="selectAnswer('${answer}', '${question.bloom}')">${answer}</button>`;
+                li.innerHTML = `<button onclick="selectAnswer('${answer}', '${question.bloom}', '${question.competency}')">${answer}</button>`;
                 answersContainer.appendChild(li);
             });
         }
 
-        function selectAnswer(answer, bloom) {
+        function selectAnswer(answer, bloom, competency) {
             const question = questions[currentQuestionIndex];
             const feedbackContainer = document.querySelector("#feedback-container");
 
             if (answer === question.correct) {
                 bloomPoints[bloom]++;
+                competencyPoints[competency]++;
                 document.getElementById(`${bloom.toLowerCase()}-points`).textContent = bloomPoints[bloom];
+                document.getElementById(`competency-${competency.toLowerCase().replace(/ /g, '-')}`).textContent = competencyPoints[competency];
                 feedbackContainer.textContent = "Good job! You got it right!";
                 feedbackContainer.className = "feedback";
             } else {
