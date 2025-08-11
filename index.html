@@ -5,45 +5,303 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>US Mountain Ranges Quiz</title>
     <style>
-        body { font-family: Arial, sans-serif; }
-        .quiz-container { width: 50%; margin: auto; }
-        .question { font-size: 1.2em; margin-bottom: 10px; }
+        body { 
+            font-family: Arial, sans-serif; 
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+        .quiz-container { 
+            width: 80%; 
+            max-width: 900px;
+            margin: auto; 
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        .question { 
+            font-size: 1.3em; 
+            margin-bottom: 20px; 
+            color: #333;
+            font-weight: bold;
+        }
         .answers { list-style-type: none; padding: 0; }
         .answers li { margin: 10px 0; }
-        .results { margin-top: 20px; }
-        .results div { margin: 5px 0; }
-        .feedback { font-size: 1.1em; color: #2e8b57; margin-top: 10px; }
-        .incorrect-feedback { color: #e74c3c; }
+        .answers button {
+            width: 100%;
+            padding: 12px;
+            font-size: 1.1em;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .answers button:hover {
+            background: #f0f8ff;
+            border-color: #4CAF50;
+            transform: translateY(-2px);
+        }
+        .results { 
+            margin-top: 30px; 
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+        .results-section {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+        }
+        .results h3 { 
+            color: #444; 
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        /* Progress Bars */
+        .progress-item {
+            margin: 15px 0;
+        }
+        .progress-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #555;
+        }
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            background: #e0e0e0;
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+        }
+        .progress-fill {
+            height: 100%;
+            border-radius: 10px;
+            transition: width 0.6s ease;
+            position: relative;
+        }
+        
+        /* Bloom's Taxonomy Colors */
+        .bloom-recall .progress-fill { background: linear-gradient(45deg, #FF6B6B, #FF8E8E); }
+        .bloom-comprehend .progress-fill { background: linear-gradient(45deg, #4ECDC4, #7FDBDA); }
+        .bloom-apply .progress-fill { background: linear-gradient(45deg, #45B7D1, #74C4E8); }
+        .bloom-analyze .progress-fill { background: linear-gradient(45deg, #96CEB4, #B8DAC9); }
+        .bloom-evaluate .progress-fill { background: linear-gradient(45deg, #FECA57, #FED896); }
+        .bloom-create .progress-fill { background: linear-gradient(45deg, #FF9FF3, #F368E0); }
+        
+        /* Competency Colors */
+        .comp-geographic .progress-fill { background: linear-gradient(45deg, #3498db, #5dade2); }
+        .comp-physical .progress-fill { background: linear-gradient(45deg, #e67e22, #f39c12); }
+        .comp-human .progress-fill { background: linear-gradient(45deg, #27ae60, #2ecc71); }
+        
+        /* Circular Progress */
+        .circular-progress {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: conic-gradient(#4CAF50 var(--percentage, 0%), #e0e0e0 0%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 10px auto;
+            position: relative;
+        }
+        .circular-progress::before {
+            content: '';
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: white;
+            position: absolute;
+        }
+        .circular-progress .percentage {
+            position: relative;
+            z-index: 1;
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+        
+        /* Star Rating */
+        .star-rating {
+            text-align: center;
+            font-size: 2em;
+            margin: 10px 0;
+        }
+        .star {
+            color: #ddd;
+            transition: color 0.3s ease;
+        }
+        .star.filled {
+            color: #ffd700;
+        }
+        
+        .feedback { 
+            font-size: 1.2em; 
+            color: #2e8b57; 
+            margin: 20px 0;
+            padding: 15px;
+            border-radius: 8px;
+            background: #f0f8ff;
+            border-left: 4px solid #2e8b57;
+        }
+        .incorrect-feedback { 
+            color: #e74c3c; 
+            background: #fff5f5;
+            border-left-color: #e74c3c;
+        }
+        
+        .next-btn {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            padding: 15px 30px;
+            font-size: 1.1em;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: transform 0.3s ease;
+        }
+        .next-btn:hover {
+            transform: translateY(-2px);
+        }
+        
+        .overall-progress {
+            text-align: center;
+            margin: 20px 0;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
     </style>
 </head>
 <body>
 
     <div class="quiz-container">
+        <div class="overall-progress">
+            <h2>Overall Progress</h2>
+            <div class="circular-progress" id="overall-circular">
+                <div class="percentage" id="overall-percentage">0%</div>
+            </div>
+            <div class="star-rating" id="overall-stars">
+                <span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span>
+            </div>
+            <p>Questions Answered Correctly: <span id="correct-count">0</span> / <span id="total-count">10</span></p>
+        </div>
+
         <div id="question-container">
             <div class="question"></div>
             <ul class="answers"></ul>
         </div>
 
-        <div class="results">
-            <h3>Points by Bloom's Taxonomy:</h3>
-            <div>Recall: <span id="recall-points">0</span></div>
-            <div>Comprehend: <span id="comprehend-points">0</span></div>
-            <div>Apply: <span id="apply-points">0</span></div>
-            <div>Analyze: <span id="analyze-points">0</span></div>
-            <div>Evaluate: <span id="evaluate-points">0</span></div>
-            <div>Create: <span id="create-points">0</span></div>
-        </div>
+        <div id="feedback-container" class="feedback" style="display: none;"></div>
+
+        <button class="next-btn" onclick="nextQuestion()">Next Question</button>
 
         <div class="results">
-            <h3>Points by Competency:</h3>
-            <div>Geographic Knowledge & Location: <span id="competency-geographic-knowledge-location">0</span></div>
-            <div>Physical Characteristics & Formation: <span id="competency-physical-characteristics-formation">0</span></div>
-            <div>Human Impact & Cultural Significance: <span id="competency-human-impact-cultural-significance">0</span></div>
+            <div class="results-section">
+                <h3>🧠 Bloom's Taxonomy Progress</h3>
+                
+                <div class="progress-item bloom-recall">
+                    <div class="progress-label">
+                        <span>Recall</span>
+                        <span id="recall-points">0</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="recall-bar" style="width: 0%"></div>
+                    </div>
+                </div>
+
+                <div class="progress-item bloom-comprehend">
+                    <div class="progress-label">
+                        <span>Comprehend</span>
+                        <span id="comprehend-points">0</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="comprehend-bar" style="width: 0%"></div>
+                    </div>
+                </div>
+
+                <div class="progress-item bloom-apply">
+                    <div class="progress-label">
+                        <span>Apply</span>
+                        <span id="apply-points">0</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="apply-bar" style="width: 0%"></div>
+                    </div>
+                </div>
+
+                <div class="progress-item bloom-analyze">
+                    <div class="progress-label">
+                        <span>Analyze</span>
+                        <span id="analyze-points">0</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="analyze-bar" style="width: 0%"></div>
+                    </div>
+                </div>
+
+                <div class="progress-item bloom-evaluate">
+                    <div class="progress-label">
+                        <span>Evaluate</span>
+                        <span id="evaluate-points">0</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="evaluate-bar" style="width: 0%"></div>
+                    </div>
+                </div>
+
+                <div class="progress-item bloom-create">
+                    <div class="progress-label">
+                        <span>Create</span>
+                        <span id="create-points">0</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="create-bar" style="width: 0%"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="results-section">
+                <h3>🏔️ Competency Areas</h3>
+                
+                <div class="progress-item comp-geographic">
+                    <div class="progress-label">
+                        <span>Geographic Knowledge</span>
+                        <span id="competency-geographic-knowledge-location">0</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="geographic-bar" style="width: 0%"></div>
+                    </div>
+                </div>
+
+                <div class="progress-item comp-physical">
+                    <div class="progress-label">
+                        <span>Physical Characteristics</span>
+                        <span id="competency-physical-characteristics-formation">0</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="physical-bar" style="width: 0%"></div>
+                    </div>
+                </div>
+
+                <div class="progress-item comp-human">
+                    <div class="progress-label">
+                        <span>Human Impact & Culture</span>
+                        <span id="competency-human-impact-cultural-significance">0</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="human-bar" style="width: 0%"></div>
+                    </div>
+                </div>
+            </div>
         </div>
-
-        <div id="feedback-container" class="feedback"></div>
-
-        <button onclick="nextQuestion()">Next Question</button>
     </div>
 
     <script>
@@ -110,6 +368,7 @@
 ];
 
         let currentQuestionIndex = 0;
+        let totalCorrect = 0;
 
         const bloomPoints = {
             Recall: 0,
@@ -126,18 +385,73 @@
             "human-impact-cultural-significance": 0
         };
 
+        const maxBloomPoints = {
+            Recall: 2,
+            Comprehend: 2,
+            Apply: 1,
+            Analyze: 2,
+            Evaluate: 2,
+            Create: 1
+        };
+
+        const maxCompetencyPoints = {
+            "geographic-knowledge-location": 3,
+            "physical-characteristics-formation": 4,
+            "human-impact-cultural-significance": 3
+        };
+
+        function updateProgressBars() {
+            // Update Bloom's bars
+            Object.keys(bloomPoints).forEach(bloom => {
+                const percentage = (bloomPoints[bloom] / maxBloomPoints[bloom]) * 100;
+                document.getElementById(`${bloom.toLowerCase()}-bar`).style.width = `${percentage}%`;
+            });
+
+            // Update Competency bars
+            const competencyMap = {
+                "geographic-knowledge-location": "geographic",
+                "physical-characteristics-formation": "physical", 
+                "human-impact-cultural-significance": "human"
+            };
+
+            Object.keys(competencyPoints).forEach(comp => {
+                const percentage = (competencyPoints[comp] / maxCompetencyPoints[comp]) * 100;
+                document.getElementById(`${competencyMap[comp]}-bar`).style.width = `${percentage}%`;
+            });
+        }
+
+        function updateOverallProgress() {
+            const overallPercentage = (totalCorrect / questions.length) * 100;
+            
+            // Update circular progress
+            const circularProgress = document.getElementById('overall-circular');
+            circularProgress.style.setProperty('--percentage', `${overallPercentage}%`);
+            document.getElementById('overall-percentage').textContent = `${Math.round(overallPercentage)}%`;
+            
+            // Update star rating (1 star per 20%)
+            const stars = Math.floor(overallPercentage / 20);
+            const starElements = document.querySelectorAll('.star');
+            starElements.forEach((star, index) => {
+                star.classList.toggle('filled', index < stars);
+            });
+            
+            // Update count
+            document.getElementById('correct-count').textContent = totalCorrect;
+        }
+
         function displayQuestion() {
             const question = questions[currentQuestionIndex];
             const questionContainer = document.querySelector(".question");
             const answersContainer = document.querySelector(".answers");
             const feedbackContainer = document.querySelector("#feedback-container");
 
-            questionContainer.textContent = question.question;
+            questionContainer.textContent = `Question ${currentQuestionIndex + 1}: ${question.question}`;
             answersContainer.innerHTML = "";
-            feedbackContainer.textContent = ""; // Clear previous feedback
+            feedbackContainer.style.display = "none";
+            
             question.answers.forEach(answer => {
                 const li = document.createElement("li");
-                li.innerHTML = `<button onclick="selectAnswer('${answer}', '${question.bloom}', '${question.competency}')">${answer}</button>`;
+                li.innerHTML = `<button onclick="selectAnswer('${answer.replace(/'/g, "\\'")}', '${question.bloom}', '${question.competency}')">${answer}</button>`;
                 answersContainer.appendChild(li);
             });
         }
@@ -146,25 +460,25 @@
             const question = questions[currentQuestionIndex];
             const feedbackContainer = document.querySelector("#feedback-container");
 
-            console.log("Selected Answer:", answer);
-            console.log("Bloom Level:", bloom);
-            console.log("Competency:", competency);
-
+            feedbackContainer.style.display = "block";
+            
             if (answer === question.correct) {
                 bloomPoints[bloom]++;
                 competencyPoints[competency]++;
+                totalCorrect++;
                 
-                console.log("Updated Competency Points for " + competency + ": " + competencyPoints[competency]);
-
                 document.getElementById(`${bloom.toLowerCase()}-points`).textContent = bloomPoints[bloom];
                 document.getElementById(`competency-${competency}`).textContent = competencyPoints[competency];
                 
-                feedbackContainer.textContent = "Good job! You got it right!";
+                feedbackContainer.textContent = "🎉 Excellent! You got it right!";
                 feedbackContainer.className = "feedback";
             } else {
-                feedbackContainer.textContent = "Keep trying, you're getting there!";
+                feedbackContainer.textContent = "💪 Keep trying! You're building knowledge with each attempt!";
                 feedbackContainer.className = "feedback incorrect-feedback";
             }
+            
+            updateProgressBars();
+            updateOverallProgress();
         }
 
         function nextQuestion() {
@@ -172,7 +486,10 @@
             displayQuestion();
         }
 
+        // Initialize
         displayQuestion();
+        updateProgressBars();
+        updateOverallProgress();
     </script>
 
 </body>
