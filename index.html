@@ -3,40 +3,58 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Simple Quiz</title>
+    <title>Quiz with Bloom's Taxonomy</title>
     <style>
         body { font-family: Arial, sans-serif; }
         .quiz-container { width: 50%; margin: auto; }
-        .question { font-size: 1.5em; margin-bottom: 20px; }
-        .answers { list-style-type: none; }
+        .question { font-size: 1.2em; margin-bottom: 10px; }
+        .answers { list-style-type: none; padding: 0; }
         .answers li { margin: 10px 0; }
+        .results { margin-top: 20px; }
+        .results div { margin: 5px 0; }
     </style>
 </head>
 <body>
+
     <div class="quiz-container">
         <div id="question-container">
             <div class="question"></div>
             <ul class="answers"></ul>
         </div>
+
+        <div class="results">
+            <h3>Points by Bloom's Taxonomy:</h3>
+            <div>Recall: <span id="recall-points">0</span></div>
+            <div>Comprehend: <span id="comprehend-points">0</span></div>
+            <div>Apply: <span id="apply-points">0</span></div>
+            <div>Analyze: <span id="analyze-points">0</span></div>
+            <div>Evaluate: <span id="evaluate-points">0</span></div>
+            <div>Create: <span id="create-points">0</span></div>
+        </div>
+
         <button onclick="nextQuestion()">Next Question</button>
     </div>
 
     <script>
         const questions = [
-            { question: "What is the capital of France?", answers: ["Paris", "Berlin", "Madrid"], correct: "Paris" },
-            { question: "What is 2 + 2?", answers: ["3", "4", "5"], correct: "4" },
-            { question: "Who wrote '1984'?", answers: ["George Orwell", "J.K. Rowling", "Mark Twain"], correct: "George Orwell" },
-            { question: "What is the largest planet in our solar system?", answers: ["Earth", "Jupiter", "Saturn"], correct: "Jupiter" },
-            { question: "What is the boiling point of water?", answers: ["90°C", "100°C", "120°C"], correct: "100°C" },
-            { question: "Who painted the Mona Lisa?", answers: ["Vincent van Gogh", "Pablo Picasso", "Leonardo da Vinci"], correct: "Leonardo da Vinci" },
-            { question: "What is the square root of 16?", answers: ["2", "4", "8"], correct: "4" },
-            { question: "Which animal is known as the King of the Jungle?", answers: ["Lion", "Tiger", "Elephant"], correct: "Lion" },
-            { question: "What is the longest river in the world?", answers: ["Amazon", "Nile", "Yangtze"], correct: "Nile" },
-            { question: "What element does 'O' represent on the periodic table?", answers: ["Oxygen", "Osmium", "Ozone"], correct: "Oxygen" }
+            { question: "What is 2 + 2?", answers: ["3", "4", "5"], correct: "4", bloom: "Recall" },
+            { question: "Explain why water boils at 100°C.", answers: ["Because it's a chemical reaction", "Because of air pressure", "Because of molecular movement"], correct: "Because of molecular movement", bloom: "Comprehend" },
+            { question: "Use the Pythagorean theorem to solve for c in a right triangle.", answers: ["c = √(a^2 + b^2)", "c = a + b", "c = a - b"], correct: "c = √(a^2 + b^2)", bloom: "Apply" },
+            { question: "Identify the primary argument in an article on climate change.", answers: ["Global warming is caused by humans", "Climate change is not real", "Climate change is a natural cycle"], correct: "Global warming is caused by humans", bloom: "Analyze" },
+            { question: "Judge the effectiveness of a public policy on climate change.", answers: ["It's working", "It's not working", "It needs more funding"], correct: "It's working", bloom: "Evaluate" },
+            { question: "Design a solution to reduce energy consumption in cities.", answers: ["Use solar power", "Improve insulation", "Increase public transportation"], correct: "Increase public transportation", bloom: "Create" }
         ];
 
         let currentQuestionIndex = 0;
-        let selectedAnswer = "";
+
+        const bloomPoints = {
+            Recall: 0,
+            Comprehend: 0,
+            Apply: 0,
+            Analyze: 0,
+            Evaluate: 0,
+            Create: 0
+        };
 
         function displayQuestion() {
             const question = questions[currentQuestionIndex];
@@ -47,24 +65,26 @@
             answersContainer.innerHTML = "";
             question.answers.forEach(answer => {
                 const li = document.createElement("li");
-                li.innerHTML = `<button onclick="selectAnswer('${answer}')">${answer}</button>`;
+                li.innerHTML = `<button onclick="selectAnswer('${answer}', '${question.bloom}')">${answer}</button>`;
                 answersContainer.appendChild(li);
             });
         }
 
-        function selectAnswer(answer) {
-            selectedAnswer = answer;
-            console.log(`Selected answer: ${selectedAnswer}`);
+        function selectAnswer(answer, bloom) {
+            const question = questions[currentQuestionIndex];
+            if (answer === question.correct) {
+                bloomPoints[bloom]++;
+                document.getElementById(`${bloom.toLowerCase()}-points`).textContent = bloomPoints[bloom];
+            }
         }
 
         function nextQuestion() {
-            // You can test with random selection or just move sequentially
             currentQuestionIndex = (currentQuestionIndex + 1) % questions.length;
             displayQuestion();
         }
 
-        // Initialize quiz with first question
         displayQuestion();
     </script>
+
 </body>
 </html>
