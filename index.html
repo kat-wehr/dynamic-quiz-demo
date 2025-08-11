@@ -52,61 +52,61 @@
       answers: ["Rocky Mountains", "Appalachian Mountains", "Cascade Range", "Sierra Nevada"], 
       correct: "Appalachian Mountains", 
       bloom: "Recall", 
-      competency: "Geographic-Knowledge-Location" },
+      competency: "geographic-knowledge-location" },
 
     { question: "The Continental Divide primarily runs through which mountain range?", 
       answers: ["Appalachian Mountains", "Sierra Nevada", "Rocky Mountains", "Adirondack Mountains"], 
       correct: "Rocky Mountains", 
       bloom: "Comprehend", 
-      competency: "Geographic-Knowledge-Location" },
+      competency: "geographic-knowledge-location" },
 
     { question: "What is the highest peak in the continental United States?", 
       answers: ["Mount McKinley", "Mount Whitney", "Mount Washington", "Mount Elbert"], 
       correct: "Mount Whitney", 
       bloom: "Recall", 
-      competency: "Physical-Characteristics-Formation" },
+      competency: "physical-characteristics-formation" },
 
     { question: "If you were hiking in a mountain range known for its ancient, worn-down peaks and dense forests, which range would you most likely be exploring?", 
       answers: ["Rocky Mountains", "Cascade Range", "Appalachian Mountains", "Sierra Nevada"], 
       correct: "Appalachian Mountains", 
       bloom: "Apply", 
-      competency: "Physical-Characteristics-Formation" },
+      competency: "physical-characteristics-formation" },
 
     { question: "Why were the Appalachian Mountains significant during early American westward expansion?", 
       answers: ["They provided easy passage to the Pacific Ocean", "They served as a natural barrier that initially limited westward movement", "They were the primary source of gold during the Gold Rush", "They had the best climate for farming"], 
       correct: "They served as a natural barrier that initially limited westward movement", 
       bloom: "Comprehend", 
-      competency: "Human-Impact-Cultural-Significance" },
+      competency: "human-impact-cultural-significance" },
 
     { question: "Compare the geographic distribution of the Rocky Mountains and Sierra Nevada. What can you conclude about their formation and age?", 
       answers: ["Both ranges run north-south and are approximately the same age", "The Rocky Mountains cover more states and are part of a larger, more complex system", "The Sierra Nevada is older because it's closer to the ocean", "Both were formed by the same geological process at the same time"], 
       correct: "The Rocky Mountains cover more states and are part of a larger, more complex system", 
       bloom: "Analyze", 
-      competency: "Geographic-Knowledge-Location" },
+      competency: "geographic-knowledge-location" },
 
     { question: "The Pacific Ring of Fire influences which US mountain range's volcanic activity?", 
       answers: ["Appalachian Mountains", "Rocky Mountains", "Ozark Mountains", "Cascade Range"], 
       correct: "Cascade Range", 
       bloom: "Analyze", 
-      competency: "Physical-Characteristics-Formation" },
+      competency: "physical-characteristics-formation" },
 
     { question: "Assess the impact of the Transcontinental Railroad on mountain communities in the Sierra Nevada. Which statement best represents the most significant long-term effect?", 
       answers: ["It eliminated all Native American populations in the region", "It transformed the region from isolated mining camps to connected communities with diverse economies", "It made farming the primary economic activity in the mountains", "It had no lasting impact on local communities"], 
       correct: "It transformed the region from isolated mining camps to connected communities with diverse economies", 
       bloom: "Evaluate", 
-      competency: "Human-Impact-Cultural-Significance" },
+      competency: "human-impact-cultural-significance" },
 
     { question: "Design a hiking route that would allow someone to experience three different types of mountain formation processes in the western United States. Which combination of ranges would best achieve this goal?", 
       answers: ["Rocky Mountains, Sierra Nevada, and Cascade Range", "Appalachian Mountains, Ozark Mountains, and Rocky Mountains", "Sierra Nevada only (different elevations)", "Cascade Range and Olympic Mountains only"], 
       correct: "Rocky Mountains, Sierra Nevada, and Cascade Range", 
       bloom: "Create", 
-      competency: "Physical-Characteristics-Formation" },
+      competency: "physical-characteristics-formation" },
 
     { question: "Evaluate this statement: 'Mountain ranges in the western United States have had a greater impact on modern American culture than eastern ranges.' What evidence would best support or refute this claim?", 
       answers: ["Western ranges are taller, so they're more impressive", "Eastern ranges are older and therefore more historically significant", "Western ranges continue to influence recreation, environmental policy, and pop culture more prominently today", "The statement cannot be evaluated because cultural impact cannot be measured"], 
       correct: "Western ranges continue to influence recreation, environmental policy, and pop culture more prominently today", 
       bloom: "Evaluate", 
-      competency: "Human-Impact-Cultural-Significance" }
+      competency: "human-impact-cultural-significance" }
 ];
 
         let currentQuestionIndex = 0;
@@ -121,9 +121,9 @@
         };
 
         const competencyPoints = {
-            "Geographic Knowledge & Location": 0,
-            "Physical Characteristics & Formation": 0,
-            "Human Impact & Cultural Significance": 0
+            "geographic-knowledge-location": 0,
+            "physical-characteristics-formation": 0,
+            "human-impact-cultural-significance": 0
         };
 
         function displayQuestion() {
@@ -143,30 +143,29 @@
         }
 
         function selectAnswer(answer, bloom, competency) {
-    const question = questions[currentQuestionIndex];
-    const feedbackContainer = document.querySelector("#feedback-container");
+            const question = questions[currentQuestionIndex];
+            const feedbackContainer = document.querySelector("#feedback-container");
 
-    console.log("Selected Answer:", answer);
-    console.log("Bloom Level:", bloom);
-    console.log("Competency:", competency);  // Debugging line
+            console.log("Selected Answer:", answer);
+            console.log("Bloom Level:", bloom);
+            console.log("Competency:", competency);
 
-    if (answer === question.correct) {
-        bloomPoints[bloom]++;
-        competencyPoints[competency]++;
-        
-        // Debugging the competency value before updating the display
-        console.log("Updated Competency Points for " + competency + ": " + competencyPoints[competency]);
+            if (answer === question.correct) {
+                bloomPoints[bloom]++;
+                competencyPoints[competency]++;
+                
+                console.log("Updated Competency Points for " + competency + ": " + competencyPoints[competency]);
 
-        document.getElementById(`${bloom.toLowerCase()}-points`).textContent = bloomPoints[bloom];
-        document.getElementById(`competency-${competency.toLowerCase().replace(/ /g, '-')}`).textContent = competencyPoints[competency];
-        
-        feedbackContainer.textContent = "Good job! You got it right!";
-        feedbackContainer.className = "feedback";
-    } else {
-        feedbackContainer.textContent = "Keep trying, you're getting there!";
-        feedbackContainer.className = "feedback incorrect-feedback";
-    }
-}
+                document.getElementById(`${bloom.toLowerCase()}-points`).textContent = bloomPoints[bloom];
+                document.getElementById(`competency-${competency}`).textContent = competencyPoints[competency];
+                
+                feedbackContainer.textContent = "Good job! You got it right!";
+                feedbackContainer.className = "feedback";
+            } else {
+                feedbackContainer.textContent = "Keep trying, you're getting there!";
+                feedbackContainer.className = "feedback incorrect-feedback";
+            }
+        }
 
         function nextQuestion() {
             currentQuestionIndex = (currentQuestionIndex + 1) % questions.length;
