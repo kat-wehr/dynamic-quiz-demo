@@ -143,21 +143,30 @@
         }
 
         function selectAnswer(answer, bloom, competency) {
-            const question = questions[currentQuestionIndex];
-            const feedbackContainer = document.querySelector("#feedback-container");
+    const question = questions[currentQuestionIndex];
+    const feedbackContainer = document.querySelector("#feedback-container");
 
-            if (answer === question.correct) {
-                bloomPoints[bloom]++;
-                competencyPoints[competency]++;
-                document.getElementById(`${bloom.toLowerCase()}-points`).textContent = bloomPoints[bloom];
-                document.getElementById(`competency-${competency.toLowerCase().replace(/ /g, '-')}`).textContent = competencyPoints[competency];
-                feedbackContainer.textContent = "Good job! You got it right!";
-                feedbackContainer.className = "feedback";
-            } else {
-                feedbackContainer.textContent = "Keep trying, you're getting there!";
-                feedbackContainer.className = "feedback incorrect-feedback";
-            }
-        }
+    console.log("Selected Answer:", answer);
+    console.log("Bloom Level:", bloom);
+    console.log("Competency:", competency);  // Debugging line
+
+    if (answer === question.correct) {
+        bloomPoints[bloom]++;
+        competencyPoints[competency]++;
+        
+        // Debugging the competency value before updating the display
+        console.log("Updated Competency Points for " + competency + ": " + competencyPoints[competency]);
+
+        document.getElementById(`${bloom.toLowerCase()}-points`).textContent = bloomPoints[bloom];
+        document.getElementById(`competency-${competency.toLowerCase().replace(/ /g, '-')}`).textContent = competencyPoints[competency];
+        
+        feedbackContainer.textContent = "Good job! You got it right!";
+        feedbackContainer.className = "feedback";
+    } else {
+        feedbackContainer.textContent = "Keep trying, you're getting there!";
+        feedbackContainer.className = "feedback incorrect-feedback";
+    }
+}
 
         function nextQuestion() {
             currentQuestionIndex = (currentQuestionIndex + 1) % questions.length;
