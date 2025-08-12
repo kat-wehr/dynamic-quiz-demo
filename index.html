@@ -465,6 +465,38 @@
               competency: "human-impact-cultural-significance" }
         ];
 
+        const questionPools = {
+    'Recall': [
+        { question: "Which mountain range contains Mount Rushmore?", 
+          answers: ["Rocky Mountains", "Black Hills", "Appalachian Mountains", "Ozark Mountains"], 
+          correct: "Black Hills", 
+          bloom: "Recall", 
+          competency: "geographic-knowledge-location" },
+        
+        { question: "What is the tallest mountain in North America?", 
+          answers: ["Mount Whitney", "Mount McKinley (Denali)", "Mount Washington", "Mount Elbert"], 
+          correct: "Mount McKinley (Denali)", 
+          bloom: "Recall", 
+          competency: "physical-characteristics-formation" }
+    ],
+    
+    'Comprehend': [
+        { question: "How do the Appalachian Mountains differ from the Rocky Mountains in terms of age and appearance?", 
+          answers: ["Appalachians are younger and sharper", "Appalachians are older and more worn down", "They are the same age", "Rocky Mountains are older"], 
+          correct: "Appalachians are older and more worn down", 
+          bloom: "Comprehend", 
+          competency: "physical-characteristics-formation" }
+    ],
+    
+    'Apply': [
+        { question: "If you wanted to find the best skiing conditions, which mountain range would you choose and why?", 
+          answers: ["Appalachians - they get more snow", "Rocky Mountains - higher elevation and consistent snow", "Ozarks - they're closer to cities", "All ranges have equal skiing"], 
+          correct: "Rocky Mountains - higher elevation and consistent snow", 
+          bloom: "Apply", 
+          competency: "physical-characteristics-formation" }
+    ]
+};
+
         let currentQuestionIndex = 0;
         let totalCorrect = 0;
         let questionsCompleted = 0;
