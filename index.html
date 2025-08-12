@@ -776,6 +776,46 @@
             document.getElementById('feedback-summary').style.display = 'block';
             document.getElementById('next-btn').style.display = 'none';
         }
+
+        function startFocusedPractice() {
+    // Identify weak areas (less than 50% performance)
+    const weakBlooms = Object.keys(bloomPoints).filter(bloom => 
+        (bloomPoints[bloom] / maxBloomPoints[bloom]) < 0.5 && maxBloomPoints[bloom] > 0
+    );
+    
+    const weakCompetencies = Object.keys(competencyPoints).filter(comp => 
+        (competencyPoints[comp] / maxCompetencyPoints[comp]) < 0.5
+    );
+    
+    // Build focused question set
+    focusedQuestions = [];
+    
+    // Add questions from weak Bloom levels
+    weakBlooms.forEach(bloom => {
+        if (questionPools[bloom]) {
+            focusedQuestions.push(...questionPools[bloom]);
+        }
+    });
+    
+    // If no focused questions, use original weak questions
+    if (focusedQuestions.length === 0) {
+        // Fallback: use questions from original quiz that target weak areas
+        questions.forEach(q => {
+            if (weakBlooms.includes(q.bloom) || weakCompetencies.includes(q.competency)) {
+                focusedQuestions.push(q);
+            }
+        });
+    }
+    
+    // Start focused practice mode
+    isFocusedPractice = true;
+    currentQuestionIndex = 0;
+    document.getElementById('feedback-summary').style.display = 'none';
+    document.getElementById('next-btn').style.display = 'block';
+    document.getElementById('next-btn').textContent = 'Next Question';
+    
+    displayQuestion();
+}
         
         function restartQuiz() {
             // Reset all variables
