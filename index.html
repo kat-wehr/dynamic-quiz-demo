@@ -623,13 +623,14 @@
             currentQuestionIndex++;
             
             // Check if we've completed all questions
-            if (currentQuestionIndex >= questions.length) {
+            const currentQuestions = isFocusedPractice ? focusedQuestions : questions;
+            if (currentQuestionIndex >= currentQuestions.length) {
                 displayFeedbackSummary();
                 return;
             }
             
             // Update button text for last question
-            if (currentQuestionIndex === questions.length - 1) {
+            if (currentQuestionIndex === currentQuestions.length - 1) {
                 document.getElementById('next-btn').textContent = 'View Results';
             }
             
