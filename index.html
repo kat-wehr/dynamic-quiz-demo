@@ -573,7 +573,8 @@
         }
 
         function displayQuestion() {
-            const question = questions[currentQuestionIndex];
+            const currentQuestions = isFocusedPractice ? focusedQuestions : questions;
+            const question = currentQuestions[currentQuestionIndex];
             const questionContainer = document.querySelector(".question");
             const answersContainer = document.querySelector(".answers");
             const feedbackContainer = document.querySelector("#feedback-container");
