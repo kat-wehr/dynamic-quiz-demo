@@ -846,6 +846,9 @@
             Object.keys(competencyPoints).forEach(comp => {
                 document.getElementById(`competency-${comp}`).textContent = '0';
             });
+            
+            isFocusedPractice = false;
+            focusedQuestions = [];
         }
         
         function showDetailedAnalysis() {
