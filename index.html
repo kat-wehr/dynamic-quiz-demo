@@ -594,30 +594,32 @@
         }
 
         function selectAnswer(answer, bloom, competency) {
-            const question = questions[currentQuestionIndex];
-            const feedbackContainer = document.querySelector("#feedback-container");
+  const currentQuestions = isFocusedPractice ? focusedQuestions : questions;
+  const question = currentQuestions[currentQuestionIndex];
+  const feedbackContainer = document.querySelector("#feedback-container");
 
-            feedbackContainer.style.display = "block";
-            
-            if (answer === question.correct) {
-                bloomPoints[bloom]++;
-                competencyPoints[competency]++;
-                totalCorrect++;
-                
-                document.getElementById(`${bloom.toLowerCase()}-points`).textContent = bloomPoints[bloom];
-                document.getElementById(`competency-${competency}`).textContent = competencyPoints[competency];
-                
-                feedbackContainer.textContent = "🎉 Excellent! You got it right!";
-                feedbackContainer.className = "feedback";
-            } else {
-                feedbackContainer.textContent = "💪 Keep trying! You're building knowledge with each attempt!";
-                feedbackContainer.className = "feedback incorrect-feedback";
-            }
-            
-            questionsCompleted++;
-            updateProgressBars();
-            updateOverallProgress();
-        }
+  feedbackContainer.style.display = "block";
+
+  if (answer === question.correct) {
+    bloomPoints[bloom]++;
+    competencyPoints[competency]++;
+    totalCorrect++;
+
+    document.getElementById(`${bloom.toLowerCase()}-points`).textContent = bloomPoints[bloom];
+    document.getElementById(`competency-${competency}`).textContent = competencyPoints[competency];
+
+    feedbackContainer.textContent = "🎉 Excellent! You got it right!";
+    feedbackContainer.className = "feedback";
+  } else {
+    feedbackContainer.textContent = "💪 Keep trying! You're building knowledge with each attempt!";
+    feedbackContainer.className = "feedback incorrect-feedback";
+  }
+
+  questionsCompleted++;
+  updateProgressBars();
+  updateOverallProgress();
+}
+
 
         function nextQuestion() {
             currentQuestionIndex++;
