@@ -307,9 +307,12 @@
             <ul class="answers"></ul>
         </div>
 
-        <div id="feedback-container" class="feedback" style="display: none;">
-        </div> 
-        <span class="tooltip">ℹ️
+        <div id="feedback-container" class="feedback" style="display: none;"><span class="tooltip">ℹ️
+    <span class="tooltip-text">
+        <strong>GenAI Integration Point:</strong><br>
+        In a more complex question type, like a written response, our feedback agent could provide more relevant and descriptive feedback in real time.  
+    </span>
+</span> </div> <span class="tooltip">ℹ️
     <span class="tooltip-text">
         <strong>GenAI Integration Point:</strong><br>
         In an ideal implementation, these questions and corresponding learning analytics/xAPI statements would be generated automatically via AI tools. The AI agent could be trained on a question set.  
@@ -665,20 +668,10 @@
     document.getElementById(`${bloom.toLowerCase()}-points`).textContent = bloomPoints[bloom];
     document.getElementById(`competency-${competency}`).textContent = competencyPoints[competency];
 
-    feedbackContainer.textContent = "🎉 Excellent! You got it right!<span class="tooltip">ℹ️
-    <span class="tooltip-text">
-        <strong>GenAI Integration Point:</strong><br>
-        In a more complex question type, like a written response, our feedback agent could provide more relevant and descriptive feedback in real time.  
-    </span>
-</span> ";
+    feedbackContainer.textContent = "🎉 Excellent! You got it right!";
     feedbackContainer.className = "feedback";
   } else {
-    feedbackContainer.textContent = "💪 Keep trying! You're building knowledge with each attempt!<span class="tooltip">ℹ️
-    <span class="tooltip-text">
-        <strong>GenAI Integration Point:</strong><br>
-        In a more complex question type, like a written response, our feedback agent could provide more relevant and descriptive feedback in real time.  
-    </span>
-</span> ";
+    feedbackContainer.textContent = "💪 Keep trying! You're building knowledge with each attempt!";
     feedbackContainer.className = "feedback incorrect-feedback";
   }
 
@@ -885,14 +878,14 @@
   document.getElementById('next-btn').style.display = 'block';
   document.getElementById('next-btn').textContent = 'Next Question';
 
-  // Set the denominator to the focused set size before updating progress
+  // ✅ NEW: set the denominator to the focused set size *before* updating progress
   document.getElementById('total-count').textContent = focusedQuestions.length;
 
-  // Keep progress ring/stars in sync right away 
-  updateProgressBars();        
-  updateOverallProgress();     
+  // Keep progress ring/stars in sync right away (optional but nice)
+  updateProgressBars();        // if you track per-Bloom/competency bars
+  updateOverallProgress();     // now uses the correct denominator
 
-  // Render the first focused question 
+  // Render the first focused question (and your existing handler binding)
   displayQuestion();
 }
         
