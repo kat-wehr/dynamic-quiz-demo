@@ -303,11 +303,21 @@
         </div>
 
         <div id="question-container">
-            <div class="question"></div>
+            <div class="question"></div> span class="tooltip">ℹ️
+    <span class="tooltip-text">
+        <strong>GenAI Integration Point:</strong><br>
+        In an ideal implementation, these questions and corresponding learning analytics/xAPI statements would be generated automatically via AI tools. The AI agent could be trained on a question set.  
+    </span>
+</span> 
             <ul class="answers"></ul>
         </div>
 
-        <div id="feedback-container" class="feedback" style="display: none;"></div>
+        <div id="feedback-container" class="feedback" style="display: none;"></div> span class="tooltip">ℹ️
+    <span class="tooltip-text">
+        <strong>GenAI Integration Point:</strong><br>
+        In a more complex question type, like a written response, our feedback agent could provide more relevant and descriptive feedback in real time.  
+    </span>
+</span> 
 
         <button class="next-btn" onclick="nextQuestion()" id="next-btn">Next Question</button>
         
@@ -321,7 +331,12 @@
                 </div>
                 
                 <div class="improvement-area">
-                    <h3>🎯 Growth Opportunities</h3>
+                    <h3>🎯 Growth Opportunities span class="tooltip">ℹ️
+    <span class="tooltip-text">
+        <strong>GenAI Integration Point:</strong><br>
+        In context of a course, this section could also direct learners back to specific parts of the course or text to study up.  
+    </span>
+</span> </h3>
                     <div id="improvements-content"></div>
                 </div>
             </div>
@@ -335,12 +350,13 @@
 
         <div class="results">
             <div class="results-section">
-                <h3>🧠 Bloom's Taxonomy Progress</h3> <span class="tooltip">ℹ️
+                <span class="tooltip">ℹ️
     <span class="tooltip-text">
         <strong>xAPI Integration Point:</strong><br>
         With the use of appropriate verbs, xAPI can support this level of tracking of higher-order thinking. It doesn't need to be exclusively Bloom's, this is just an example. We'd want to look at xAPI extensions to see what exists that could align with our goals. 
     </span>
-</span>               
+</span> 
+                <h3>🧠 Bloom's Taxonomy Progress</h3>               
                 
                 <div class="progress-item bloom-recall">
                     <div class="progress-label">
