@@ -554,23 +554,25 @@
         }
 
         function updateOverallProgress() {
-            const overallPercentage = (totalCorrect / questions.length) * 100;
-            
-            // Update circular progress
-            const circularProgress = document.getElementById('overall-circular');
-            circularProgress.style.setProperty('--percentage', `${overallPercentage}%`);
-            document.getElementById('overall-percentage').textContent = `${Math.round(overallPercentage)}%`;
-            
-            // Update star rating (1 star per 20%)
-            const stars = Math.floor(overallPercentage / 20);
-            const starElements = document.querySelectorAll('.star');
-            starElements.forEach((star, index) => {
-                star.classList.toggle('filled', index < stars);
-            });
-            
-            // Update count
-            document.getElementById('correct-count').textContent = totalCorrect;
-        }
+    // Use the ACTIVE set so Focused Practice math is correct
+    const activeTotal = (isFocusedPractice ? focusedQuestions.length : questions.length) || 0;
+    const overallPercentage = activeTotal ? (totalCorrect / activeTotal) * 100 : 0;
+
+    // Update circular progress
+    const circularProgress = document.getElementById('overall-circular');
+    circularProgress.style.setProperty('--percentage', `${overallPercentage}%`);
+    document.getElementById('overall-percentage').textContent = `${Math.round(overallPercentage)}%`;
+
+    // Update star rating (1 star per 20%)
+    const stars = Math.floor(overallPercentage / 20);
+    document.querySelectorAll('.star').forEach((star, index) => {
+        star.classList.toggle('filled', index < stars);
+    });
+
+    // Update counts
+    document.getElementById('correct-count').textContent = totalCorrect;
+    document.getElementById('total-count').textContent = activeTotal; // NEW: keep the denominator truthful
+}
 
         function displayQuestion() {
             const currentQuestions = isFocusedPractice ? focusedQuestions : questions;
@@ -619,7 +621,6 @@
   updateProgressBars();
   updateOverallProgress();
 }
-
 
         function nextQuestion() {
             currentQuestionIndex++;
@@ -822,36 +823,40 @@
 }
         
         function restartQuiz() {
-            // Reset all variables
-            currentQuestionIndex = 0;
-            totalCorrect = 0;
-            questionsCompleted = 0;
-            
-            // Reset points
-            Object.keys(bloomPoints).forEach(key => bloomPoints[key] = 0);
-            Object.keys(competencyPoints).forEach(key => competencyPoints[key] = 0);
-            
-            // Reset UI
-            document.getElementById('feedback-summary').style.display = 'none';
-            document.getElementById('next-btn').style.display = 'block';
-            document.getElementById('next-btn').textContent = 'Next Question';
-            
-            // Update displays
-            updateProgressBars();
-            updateOverallProgress();
-            displayQuestion();
-            
-            // Update point displays
-            Object.keys(bloomPoints).forEach(bloom => {
-                document.getElementById(`${bloom.toLowerCase()}-points`).textContent = '0';
-            });
-            Object.keys(competencyPoints).forEach(comp => {
-                document.getElementById(`competency-${comp}`).textContent = '0';
-            });
-            
-            isFocusedPractice = false;
-            focusedQuestions = [];
-        }
+    // Reset all variables
+    currentQuestionIndex = 0;
+    totalCorrect = 0;
+    questionsCompleted = 0;
+
+    // Reset points
+    Object.keys(bloomPoints).forEach(key => bloomPoints[key] = 0);
+    Object.keys(competencyPoints).forEach(key => competencyPoints[key] = 0);
+
+    // Reset mode to main quiz
+    isFocusedPractice = false;
+    focusedQuestions = [];
+
+    // NEW: ensure total question count is correct for main quiz
+    document.getElementById('total-count').textContent = questions.length;
+
+    // Reset UI
+    document.getElementById('feedback-summary').style.display = 'none';
+    document.getElementById('next-btn').style.display = 'block';
+    document.getElementById('next-btn').textContent = 'Next Question';
+
+    // Update displays
+    updateProgressBars();
+    updateOverallProgress();
+    displayQuestion();
+
+    // Update point displays
+    Object.keys(bloomPoints).forEach(bloom => {
+        document.getElementById(`${bloom.toLowerCase()}-points`).textContent = '0';
+    });
+    Object.keys(competencyPoints).forEach(comp => {
+        document.getElementById(`competency-${comp}`).textContent = '0';
+    });
+}
         
         function showDetailedAnalysis() {
             alert('Detailed Analysis Feature:\n\nIn a full implementation, this would show:\n• Specific question performance\n• Recommended study materials\n• Links to relevant resources\n• Progress tracking over time\n• Personalized learning paths\n');
