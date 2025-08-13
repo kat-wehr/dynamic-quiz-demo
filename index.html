@@ -307,18 +307,20 @@
             <ul class="answers"></ul>
         </div>
 
-        <div id="feedback-container" class="feedback" style="display: none;"><span class="tooltip">ℹ️
+        <div id="feedback-container" class="feedback" style="display: none;"> 
+        </div> 
+        <span class="tooltip">ℹ️
     <span class="tooltip-text">
         <strong>GenAI Integration Point:</strong><br>
         In a more complex question type, like a written response, our feedback agent could provide more relevant and descriptive feedback in real time.  
     </span>
-</span> </div> <span class="tooltip">ℹ️
+</span>
+        <button class="next-btn" onclick="nextQuestion()" id="next-btn">Next Question</button> <span class="tooltip">ℹ️
     <span class="tooltip-text">
         <strong>GenAI Integration Point:</strong><br>
         In an ideal implementation, these questions and corresponding learning analytics/xAPI statements would be generated automatically via AI tools. The AI agent could be trained on a question set.  
     </span>
 </span> 
-        <button class="next-btn" onclick="nextQuestion()" id="next-btn">Next Question</button>
         
         <div class="feedback-summary" id="feedback-summary">
             <h2>🎓 Your Learning Journey Summary</h2>
