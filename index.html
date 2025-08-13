@@ -286,11 +286,61 @@
     visibility: visible;
     opacity: 1;
 }
+
+.instructions {
+    background: rgba(255, 255, 255, 0.95);
+    border: 2px solid #007bff;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 25px;
+    backdrop-filter: blur(5px);
+}
+
+.instructions h2 {
+    color: #1e40af;
+    margin-top: 0;
+    margin-bottom: 15px;
+    text-align: center;
+    font-size: 1.4em;
+}
+
+.instructions ul {
+    margin: 10px 0;
+    padding-left: 20px;
+}
+
+.instructions li {
+    margin: 8px 0;
+    color: #444;
+}
+
+.instructions .highlight {
+    background: rgba(0, 123, 255, 0.1);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-weight: bold;
+}     
     </style>
 </head>
 <body>
 
     <div class="quiz-container">
+        <div class="instructions">
+    <h2>📚 Quiz Instructions</h2>
+    <ul>
+        <li>This quiz contains <strong>10 questions</strong> about US Mountain Ranges</li>
+        <li>Questions are designed to test different <span class="highlight">cognitive levels</span> (Bloom's Taxonomy)</li>
+        <li>Track your progress in specific <span class="highlight">competency areas</span> as you go</li>
+        <li>You can take as many attempts at each question as you like, but for best performance summary results, move to the next question after your first attempt</li>
+        <li><span class="tooltip">Hover over blue text ℹ️
+            <span class="tooltip-text">
+                <strong>Prototype Feature:</strong><br>
+                These tooltips show where xAPI and AI integration would enhance the learning experience in a full implementation.
+            </span>
+        </span> to see technical integration points</li>
+        <li>Take your time - there's no time limit!</li>
+    </ul>
+</div>
         <div class="overall-progress">
             <h2>Overall Progress</h2>
             <div class="circular-progress" id="overall-circular">
