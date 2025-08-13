@@ -254,6 +254,38 @@
             background: rgba(255, 255, 255, 0.3);
             transform: translateY(-2px);
         }
+
+        .tooltip {
+    position: relative;
+    display: inline-block;
+    cursor: help;
+    border-bottom: 2px dotted #007bff;
+    color: #007bff;
+}
+
+.tooltip .tooltip-text {
+    visibility: hidden;
+    width: 300px;
+    background-color: #333;
+    color: #fff;
+    text-align: left;
+    border-radius: 6px;
+    padding: 12px;
+    position: absolute;
+    z-index: 1000;
+    bottom: 125%;
+    left: 50%;
+    margin-left: -150px;
+    opacity: 0;
+    transition: opacity 0.3s;
+    font-size: 14px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+.tooltip:hover .tooltip-text {
+    visibility: visible;
+    opacity: 1;
+}
     </style>
 </head>
 <body>
@@ -304,6 +336,12 @@
         <div class="results">
             <div class="results-section">
                 <h3>🧠 Bloom's Taxonomy Progress</h3>
+                <span class="tooltip">ℹ️
+    <span class="tooltip-text">
+        <strong>xAPI Integration Point:</strong><br>
+        With the use of appropriate verbs, xAPI can support this level of tracking of higher-order thinking. It doesn't need to be exclusively Bloom's, this is just an example. We'd want to look at xAPI extensions to see what exists that could align with our goals. 
+    </span>
+</span>
                 
                 <div class="progress-item bloom-recall">
                     <div class="progress-label">
